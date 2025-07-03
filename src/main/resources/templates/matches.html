@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Mecze Turnieju</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-100">
+<div class="container mx-auto p-4">
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold" th:text="${tournament.name}"></h1>
+        <p class="text-gray-600" th:text="${tournament.game.name}"></p>
+        <p class="text-sm text-gray-500">Status: <span th:text="${tournament.status}"></span></p>
+    </div>
+
+    <div class="grid gap-4">
+        <div th:each="match : ${matches}" class="bg-white p-4 rounded shadow">
+            <div class="grid grid-cols-7 items-center gap-4">
+                <!-- Drużyna A -->
+                <div class="col-span-2 text-right">
+                    <span class="font-semibold" th:text="${match.teamA.name}"></span>
+                </div>
+
+                <!-- Wynik -->
+                <div class="col-span-3">
+                    <form th:if="${match.status == 'SCHEDULED'}"
+                          th:action="@{/tournaments/matches/{id}(id=${match.id})}"
+                          method="POST"
+                          class="flex items-center justify-center gap-2">
+                        <input type="hidden" name="tournamentId" th:value="${tournament.id}"/>
+                        <input type="number"
+                               name="scoreA"
+                               class="w-16 p-2 border rounded text-center"
+                               min="0"
+                               required/>
+                        <span class="text-gray-500">:</span>
+                        <input type="number"
+                               name="scoreB"
+                               class="w-16 p-2 border rounded text-center"
+                               min="0"
+                               required/>
+                        <button type="submit"
+                                class="bg-green-500 text-white px-4 py-2 rounded">
+                            Zapisz
+                        </button>
+                    </form>
+                    <div th:if="${match.status == 'COMPLETED'}"
+                         class="text-center">
+                        <div class="text-xl font-bold">
+                            <span th:text="${match.scoreA}"></span>
+                            :
+                            <span th:text="${match.scoreB}"></span>
+                        </div>
+                        <div class="text-sm text-gray-500">
+                            <span th:if="${match.isDraw()}">Remis (1 punkt)</span>
+                            <span th:if="${!match.isDraw()}">
+                                Zwycięzca: <span th:text="${match.getWinner().name}"></span> (3 punkty)
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Drużyna B -->
+                <div class="col-span-2">
+                    <span class="font-semibold" th:text="${match.teamB.name}"></span>
+                </div>
+            </div>
+
+            <!-- Data meczu -->
+            <div class="text-center text-sm text-gray-500 mt-2">
+                <span th:text="${#temporals.format(match.scheduledDate, 'dd-MM-yyyy HH:mm')}"></span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

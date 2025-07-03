@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista Turniejów</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-100">
+<div class="container mx-auto p-4">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold">Lista Turniejów</h1>
+        <a href="/tournaments/new" class="bg-blue-500 text-white px-4 py-2 rounded">
+            Nowy Turniej
+        </a>
+    </div>
+
+    <div class="grid gap-4">
+        <div th:each="tournament : ${tournaments}"
+             class="bg-white p-4 rounded shadow">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-xl font-semibold" th:text="${tournament.name}"></h2>
+                    <p class="text-gray-600" th:text="${tournament.game.name}"></p>
+                    <div class="flex gap-2 text-sm">
+                        <span class="text-gray-500"
+                              th:text="${#temporals.format(tournament.startDate, 'dd-MM-yyyy HH:mm')}"></span>
+                        <span th:class="${tournament.status == 'IN_PROGRESS' ? 'text-green-500' :
+                                      (tournament.status == 'COMPLETED' ? 'text-blue-500' : 'text-yellow-500')}"
+                              th:text="${tournament.status}"></span>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <a th:href="@{/tournaments/{id}(id=${tournament.id})}"
+                       class="bg-green-500 text-white px-3 py-1 rounded">
+                        Tabela
+                    </a>
+                    <a th:href="@{/tournaments/{id}/matches(id=${tournament.id})}"
+                       class="bg-blue-500 text-white px-3 py-1 rounded">
+                        Mecze
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

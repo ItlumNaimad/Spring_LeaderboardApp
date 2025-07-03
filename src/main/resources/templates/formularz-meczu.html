@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dodaj Nowy Mecz</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen py-8">
+<div class="w-full max-w-2xl bg-white p-8 rounded-lg shadow-lg">
+    <h1 class="text-3xl font-bold text-blue-700 mb-6 text-center">Zarejestruj Wynik Meczu</h1>
+
+    <div class="mb-6">
+        <label class="block text-gray-700 text-sm font-bold mb-2">Wybierz typ meczu:</label>
+        <div class="flex gap-4">
+            <button onclick="showForm('player')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Mecz graczy
+            </button>
+            <button onclick="showForm('team')" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Mecz drużyn
+            </button>
+        </div>
+    </div>
+
+    <!-- Formularz dla meczu graczy -->
+    <form id="playerForm" th:action="@{/matches/player}" method="post" class="hidden">
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Wybierz grę:</label>
+            <select name="gameId" class="block w-full bg-white border border-gray-300 px-4 py-2 rounded">
+                <option th:each="game : ${games}" th:value="${game.id}" th:text="${game.name}"></option>
+            </select>
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Zwycięzca:</label>
+            <select name="winnerPlayerId" class="block w-full bg-white border border-gray-300 px-4 py-2 rounded">
+                <option th:each="player : ${players}" th:value="${player.id}" th:text="${player.nickname}"></option>
+            </select>
+        </div>
+        <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Przegrany:</label>
+            <select name="loserPlayerId" class="block w-full bg-white border border-gray-300 px-4 py-2 rounded">
+                <option th:each="player : ${players}" th:value="${player.id}" th:text="${player.nickname}"></option>
+            </select>
+        </div>
+        <div class="flex items-center justify-between">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Zapisz Mecz
+            </button>
+            <a href="/" class="text-blue-600 hover:text-blue-800 font-bold">Anuluj</a>
+        </div>
+    </form>
+
+    <!-- Formularz dla meczu drużyn -->
+    <form id="teamForm" th:action="@{/matches/team}" method="post" class="hidden">
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Wybierz grę:</label>
+            <select name="gameId" class="block w-full bg-white border border-gray-300 px-4 py-2 rounded">
+                <option th:each="game : ${games}" th:value="${game.id}" th:text="${game.name}"></option>
+            </select>
+        </div>
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Zwycięska drużyna:</label>
+            <select name="winnerTeamId" class="block w-full bg-white border border-gray-300 px-4 py-2 rounded">
+                <option th:each="team : ${teams}" th:value="${team.id}" th:text="${team.name}"></option>
+            </select>
+        </div>
+        <div class="mb-6">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Przegrana drużyna:</label>
+            <select name="loserTeamId" class="block w-full bg-white border border-gray-300 px-4 py-2 rounded">
+                <option th:each="team : ${teams}" th:value="${team.id}" th:text="${team.name}"></option>
+            </select>
+        </div>
+        <div class="flex items-center justify-between">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                Zapisz Mecz
+            </button>
+            <a href="/" class="text-blue-600 hover:text-blue-800 font-bold">Anuluj</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    function showForm(type) {
+        document.getElementById('playerForm').style.display = type === 'player' ? 'block' : 'none';
+        document.getElementById('teamForm').style.display = type === 'team' ? 'block' : 'none';
+    }
+    // Pokaż domyślnie formularz dla graczy
+    showForm('player');
+</script>
+</body>
+</html>

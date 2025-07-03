@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">Ranking</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-gray-100 text-gray-800">
+<div class="container mx-auto p-4 md:p-8">
+    <h1 class="text-4xl font-bold text-blue-700 mb-6" th:text="${pageTitle}">Ranking</h1>
+
+    <nav class="mb-6 flex space-x-4">
+        <a href="/rankings?type=players" class="text-blue-600 hover:text-blue-800 hover:underline">Ranking Graczy</a>
+        <a href="/rankings?type=teams" class="text-blue-600 hover:text-blue-800 hover:underline">Ranking Drużyn</a>
+        <a href="/rankings?type=top-players" class="text-blue-600 hover:text-blue-800 hover:underline">Ranking Mistrzów</a>
+        <a href="/tournaments/new" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Nowy turniej</a>
+        <a href="/manage" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Zarządzaj</a>
+        <a href="/matches/new" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Dodaj Mecz</a>
+    </nav>
+
+    <!-- Wybór gry -->
+    <div class="mb-6">
+        <select onchange="window.location.href=this.value" class="p-2 border border-gray-300 rounded-md">
+            <option value="/rankings?type=players">Wszystkie gry</option>
+            <option th:each="game : ${games}"
+                    th:value="@{/rankings(type=${currentView},gameId=${game.id})}"
+                    th:text="${game.name}"></option>
+        </select>
+    </div>
+
+    <!-- Tabela rankingowa dla graczy -->
+    <div th:if="${currentView == 'players' || currentView == 'top-players'}" class="bg-white shadow-md rounded-lg overflow-hidden">
+        <table class="min-w-full leading-normal">
+            <thead>
+            <tr>
+                <th class="px-5 py-3 border-b-2 border-gray-200 bg-blue-100 text-left text-xs font-semibold text-blue-800 uppercase tracking-wider">Pozycja</th>
+                <th class="px-5 py-3 border-b-2 border-gray-200 bg-blue-100 text-left text-xs font-semibold text-blue-800 uppercase tracking-wider">Nick</th>
+                <th class="px-5 py-3 border-b-2 border-gray-200 bg-blue-100 text-left text-xs font-semibold text-blue-800 uppercase tracking-wider">Wygrane</th>
+                <th class="px-5 py-3 border-b-2 border-gray-200 bg-blue-100 text-left text-xs font-semibold text-blue-800 uppercase tracking-wider">Przegrane</th>
+                <th class="px-5 py-3 border-b-2 border-gray-200 bg-blue-100 text-left text-xs font-semibold text-blue-800 uppercase tracking-wider">Win Ratio</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="player, iterStat : ${players}" class="hover:bg-gray-50">
+                <td class="px-5 py-5 border-b border-gray-200 text-sm" th:text="${iterStat.count}"></td>
+                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                    <p class="text-gray-900 whitespace-no-wrap" th:text="${player.nickname}"></p>
+                </td>
+                <td class="px-5 py-5 border-b border-gray-200 text-sm text-green-600 font-semibold" th:text="${player.wins}"></td>
+                <td class="px-5 py-5 border-b border-gray-200 text-sm text-red-600 font-semibold" th:text="${player.losses}"></td>
+                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                        <span th:if="${player.wins + player.losses > 0}"
+                              th:text="${#numbers.formatDecimal((player.wins * 100.0) / (player.wins + player.losses), 1, 2) + '%'}">
+                        </span>
+                    <span th:if="${player.wins + player.losses == 0}">N/A</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Tabela rankingowa dla drużyn -->
+    <div th:if="${currentView == 'teams'}" class="bg-white shadow-md rounded-lg overflow-hidden">
+        <table class="min-w-full leading-normal">
+            <thead>
+            <tr>
+                <th class="px-5 py-3 border-b-2 border-gray-200 bg-blue-100 text-left text-xs font-semibold text-blue-800 uppercase tracking-wider">Pozycja</th>
+                <th class="px-5 py-3 border-b-2 border-gray-200 bg-blue-100 text-left text-xs font-semibold text-blue-800 uppercase tracking-wider">Nazwa</th>
+                <th class="px-5 py-3 border-b-2 border-gray-200 bg-blue-100 text-left text-xs font-semibold text-blue-800 uppercase tracking-wider">Wygrane</th>
+                <th class="px-5 py-3 border-b-2 border-gray-200 bg-blue-100 text-left text-xs font-semibold text-blue-800 uppercase tracking-wider">Przegrane</th>
+                <th class="px-5 py-3 border-b-2 border-gray-200 bg-blue-100 text-left text-xs font-semibold text-blue-800 uppercase tracking-wider">Win Ratio</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="team, iterStat : ${teams}" class="hover:bg-gray-50">
+                <td class="px-5 py-5 border-b border-gray-200 text-sm" th:text="${iterStat.count}"></td>
+                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                    <p class="text-gray-900 whitespace-no-wrap" th:text="${team.name}"></p>
+                </td>
+                <td class="px-5 py-5 border-b border-gray-200 text-sm text-green-600 font-semibold" th:text="${team.wins}"></td>
+                <td class="px-5 py-5 border-b border-gray-200 text-sm text-red-600 font-semibold" th:text="${team.losses}"></td>
+                <td class="px-5 py-5 border-b border-gray-200 text-sm">
+                        <span th:if="${team.wins + team.losses > 0}"
+                              th:text="${#numbers.formatDecimal((team.wins * 100.0) / (team.wins + team.losses), 1, 2) + '%'}">
+                        </span>
+                    <span th:if="${team.wins + team.losses == 0}">N/A</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Informacja gdy nie ma danych -->
+    <div th:if="${#lists.isEmpty(players) and (currentView == 'players' || currentView == 'top-players')}"
+         class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mt-4">
+        <p class="font-bold">Brak danych</p>
+        <p>Nie znaleziono żadnych graczy spełniających kryteria.</p>
+    </div>
+
+    <div th:if="${#lists.isEmpty(teams) and currentView == 'teams'}"
+         class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mt-4">
+        <p class="font-bold">Brak danych</p>
+        <p>Nie znaleziono żadnych drużyn spełniających kryteria.</p>
+    </div>
+</div>
+</body>
+</html>
