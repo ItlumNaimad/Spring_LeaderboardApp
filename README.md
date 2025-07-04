@@ -29,10 +29,6 @@ System do zarządzania rankingami, turniejami i meczami dla różnych gier. Apli
 - Statystyki graczy i drużyn
 - Tabele wyników
 
-## 🏗️ Struktura projektu
-```
-src/ ├── main/ │ ├── java/ │ │ └── com/example/board/ │ │ ├── controller/ # Kontrolery MVC │ │ ├── model/ # Encje i modele danych │ │ ├── repository/ # Repozytoria JPA │ │ └── service/ # Warstwa logiki biznesowej │ └── resources/ │ ├── static/ # Pliki statyczne (CSS, JS) │ └── templates/ # Szablony Thymeleaf
-```
 
 ## 🚦 Status projektu i znane problemy
 - ✅ Podstawowy system rankingowy
