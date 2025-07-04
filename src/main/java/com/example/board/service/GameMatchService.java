@@ -11,7 +11,14 @@ import java.time.LocalDateTime;
 
 /**
  * Serwis odpowiedzialny za zarządzanie meczami w systemie.
+ * Obsługuje dodawanie wyników meczy zarówno dla rozgrywek indywidualnych jak i drużynowych.
+ * Zapewnia spójność danych i aktualizację statystyk graczy/drużyn.
+ *
+ * @see GameMatch
+ * @see Player
+ * @see Team
  */
+
 @Service
 public class GameMatchService {
     private static final Logger logger = LoggerFactory.getLogger(GameMatchService.class);

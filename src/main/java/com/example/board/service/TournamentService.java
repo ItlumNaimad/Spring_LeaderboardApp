@@ -8,6 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
+/**
+ * Serwis odpowiedzialny za zarządzanie turniejami w systemie.
+ * Obsługuje tworzenie, aktualizację i pobieranie informacji o turniejach.
+ */
 
 @Service
 public class TournamentService {
